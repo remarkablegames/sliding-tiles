@@ -268,7 +268,7 @@ export class Game extends Phaser.Scene {
     this.loading = true;
     this.overlay.hide();
     this.board?.setLocked(true);
-    this.hud.setStatus('Loading a new photo...');
+    this.hud.setStatus('🧩 Loading a new puzzle...');
 
     const wasTimerRunning = this.timerEvent?.paused === false;
     const pausedAt = this.time.now;

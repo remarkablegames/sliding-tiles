@@ -40,8 +40,8 @@ const TEXT_STYLE = {
   color: COLOR.TEXT,
 };
 
-const HUD_TOP = 24;
-const BUTTON_GAP = 14;
+const HEADER_TOP = 85;
+const FOOTER_GAP = 15;
 
 function getButtonStyle(active: boolean) {
   return {
@@ -92,7 +92,7 @@ export function Hud({
 
   return (
     <Fragment>
-      <Container x={layout.width / 2} y={HUD_TOP}>
+      <Container x={layout.width / 2} y={HEADER_TOP}>
         <Text
           x={0}
           y={0}
@@ -105,16 +105,20 @@ export function Hud({
         <Text
           x={0}
           y={54}
-          text="Click a tile beside a gap, or use arrow keys / WASD."
-          style={{ ...TEXT_STYLE, fontSize: 17, color: COLOR.MUTED }}
+          text="Click a tile beside a gap, or use arrow keys / WASD"
+          style={{ ...TEXT_STYLE, fontSize: 18, color: COLOR.MUTED }}
           originX={0.5}
           originY={0}
         />
 
         <Text
           x={0}
-          y={92}
-          text={`Moves: ${String(moves)}   ·   Time: ${formatTime(elapsed)}   ·   ${bestText}`}
+          y={86}
+          text={[
+            `Moves: ${String(moves)}`,
+            `Time: ${formatTime(elapsed)}`,
+            bestText,
+          ].join('   |   ')}
           style={{ ...TEXT_STYLE, fontSize: 19 }}
           originX={0.5}
           originY={0}
@@ -123,7 +127,7 @@ export function Hud({
         {status && (
           <Text
             x={0}
-            y={128}
+            y={120}
             text={status}
             style={{ ...TEXT_STYLE, fontSize: 16, color: COLOR.MUTED }}
             originX={0.5}
@@ -134,7 +138,7 @@ export function Hud({
 
       <Container
         x={layout.boardX + layout.boardSize / 2}
-        y={layout.boardY + layout.boardSize + BUTTON_GAP}
+        y={layout.boardY + layout.boardSize + FOOTER_GAP}
       >
         {DIFFICULTIES.slice()
           .reverse()
