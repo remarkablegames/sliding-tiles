@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="public/logo192.png" alt="Phaser Template">
+  <img src="public/logo192.png" alt="Sliding Tiles">
 </p>
 
-# Phaser Template
+# Sliding Tiles
 
 [![release](https://img.shields.io/github/v/release/remarkablegames/sliding-tiles)](https://github.com/remarkablegames/sliding-tiles/releases)
 [![build](https://github.com/remarkablegames/sliding-tiles/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/sliding-tiles/actions/workflows/build.yml)
 
-<kbd>sliding-tiles</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
+🧩 Slide the tiles and solve the puzzle.
 
 Play in your browser:
 
@@ -40,16 +40,6 @@ Install the dependencies:
 
 ```sh
 npm install
-```
-
-Rename the game:
-
-```sh
-git grep -l sliding-tiles | xargs sed -i '' -e 's/sliding-tiles/my-game/g'
-```
-
-```sh
-git grep -l 'Phaser Template' | xargs sed -i '' -e 's/Phaser Template/My Game/g'
 ```
 
 Update the files:

@@ -1,7 +1,7 @@
 {
-  "name": "Phaser Template",
-  "short_name": "Phaser Template",
-  "description": "Phaser Template",
+  "name": "Sliding Tiles",
+  "short_name": "Sliding Tiles",
+  "description": "🧩 Slide the tiles and solve the puzzle.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#000000",
