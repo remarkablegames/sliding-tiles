@@ -4,20 +4,20 @@
 
 # Phaser Template
 
-[![release](https://img.shields.io/github/v/release/remarkablegames/phaser-template)](https://github.com/remarkablegames/phaser-template/releases)
-[![build](https://github.com/remarkablegames/phaser-template/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/phaser-template/actions/workflows/build.yml)
+[![release](https://img.shields.io/github/v/release/remarkablegames/sliding-tiles)](https://github.com/remarkablegames/sliding-tiles/releases)
+[![build](https://github.com/remarkablegames/sliding-tiles/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/sliding-tiles/actions/workflows/build.yml)
 
-<kbd>phaser-template</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
+<kbd>sliding-tiles</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
 
 Play in your browser:
 
-- [remarkablegames](https://remarkablegames.org/phaser-template/)
+- [remarkablegames](https://remarkablegames.org/sliding-tiles/)
 
 Or download for desktop:
 
-- [Windows](https://github.com/remarkablegames/phaser-template/releases/latest/download/windows.zip)
-- [macOS](https://github.com/remarkablegames/phaser-template/releases/latest/download/macos.zip)
-- [Linux](https://github.com/remarkablegames/phaser-template/releases/latest/download/linux.zip)
+- [Windows](https://github.com/remarkablegames/sliding-tiles/releases/latest/download/windows.zip)
+- [macOS](https://github.com/remarkablegames/sliding-tiles/releases/latest/download/macos.zip)
+- [Linux](https://github.com/remarkablegames/sliding-tiles/releases/latest/download/linux.zip)
 
 ## Prerequisites
 
@@ -32,8 +32,8 @@ brew install nvm
 Clone the repository:
 
 ```sh
-git clone https://github.com/remarkablegames/phaser-template.git
-cd phaser-template
+git clone https://github.com/remarkablegames/sliding-tiles.git
+cd sliding-tiles
 ```
 
 Install the dependencies:
@@ -45,7 +45,7 @@ npm install
 Rename the game:
 
 ```sh
-git grep -l phaser-template | xargs sed -i '' -e 's/phaser-template/my-game/g'
+git grep -l sliding-tiles | xargs sed -i '' -e 's/sliding-tiles/my-game/g'
 ```
 
 ```sh
