@@ -1,13 +1,11 @@
 import Phaser from 'phaser';
 
+import { COLOR } from './constants';
 import * as scenes from './scenes';
 
-/**
- * https://rexrainbow.github.io/phaser3-rex-notes/docs/site/game/
- */
 new Phaser.Game({
-  width: 800, // 1024
-  height: 600, // 768
+  width: 800,
+  height: 600,
   title: 'Sliding Tiles',
   url: import.meta.env.VITE_APP_HOMEPAGE,
   version: import.meta.env.VITE_APP_VERSION,
@@ -15,18 +13,8 @@ new Phaser.Game({
     scenes.Boot,
     ...Object.values(scenes).filter((scene) => scene !== scenes.Boot),
   ],
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: {
-        x: 0,
-        y: 300,
-      },
-      debug: import.meta.env.DEV,
-    },
-  },
   disableContextMenu: import.meta.env.PROD,
-  backgroundColor: '#fff',
+  backgroundColor: COLOR.BACKGROUND,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

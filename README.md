@@ -19,6 +19,14 @@ Or download for desktop:
 - [macOS](https://github.com/remarkablegames/sliding-tiles/releases/latest/download/macos.zip)
 - [Linux](https://github.com/remarkablegames/sliding-tiles/releases/latest/download/linux.zip)
 
+## How to Play
+
+- Choose a 3×3, 4×4, or 5×5 board.
+- Click a tile beside the gap, or use the arrow keys / WASD to slide tiles.
+- Solve the photo in the fastest time. Best times are saved in your browser.
+
+Photos are loaded from [Lorem Picsum](https://picsum.photos/).
+
 ## Prerequisites
 
 [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):

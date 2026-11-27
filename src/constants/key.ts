@@ -1,11 +1,12 @@
 export const TEXTURE = {
-  DUDE: 'Dude',
-  GROUND: 'Ground',
-  SKY: 'Sky',
-  STAR: 'Star',
+  PUZZLE: 'Puzzle',
 } as const;
 
 export const SCENE = {
   BOOT: 'Boot',
   GAME: 'Game',
+} as const;
+
+export const DATA = {
+  SEED: 'Seed',
 } as const;

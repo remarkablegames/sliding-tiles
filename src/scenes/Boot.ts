@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
-import { KEY } from '../constants';
+import { COLOR, FONT_FAMILY, KEY, LAYOUT } from '../constants';
+import { createSeed, getPicsumUrl, getPuzzleTextureKey } from '../utils';
 
 export class Boot extends Phaser.Scene {
   constructor() {
@@ -8,13 +9,18 @@ export class Boot extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet(KEY.TEXTURE.DUDE, 'sprites/dude.png', {
-      frameWidth: 32,
-      frameHeight: 48,
-    });
-    this.load.image(KEY.TEXTURE.GROUND, 'images/platform.png');
-    this.load.image(KEY.TEXTURE.SKY, 'backgrounds/sky.png');
-    this.load.image(KEY.TEXTURE.STAR, 'images/star.png');
+    this.add
+      .text(LAYOUT.WIDTH / 2, LAYOUT.HEIGHT / 2, 'Loading photo...', {
+        fontFamily: FONT_FAMILY,
+        fontSize: 20,
+        color: COLOR.MUTED,
+      })
+      .setOrigin(0.5);
+
+    const seed = createSeed();
+
+    this.registry.set(KEY.DATA.SEED, seed);
+    this.load.image(getPuzzleTextureKey(seed), getPicsumUrl(seed));
   }
 
   create() {
