@@ -1,6 +1,6 @@
-import { Fragment, Rectangle, Text, useState } from 'phaser-jsx';
+import { Container, Rectangle, Text, useState } from 'phaser-jsx';
 
-import { COLOR, FONT_FAMILY, LAYOUT } from '../constants';
+import { COLOR, FONT_FAMILY } from '../constants';
 import { type BestScore, formatTime } from '../utils';
 
 export interface WinStats {
@@ -13,23 +13,23 @@ export interface WinStats {
 export interface WinOverlayHandle {
   show: (stats: WinStats) => void;
   hide: () => void;
+  resize: (width: number, height: number) => void;
 }
 
 interface WinOverlayProps {
   onReady: (handle: WinOverlayHandle) => void;
   onPlayAgain: () => void;
   onNewImage: () => void;
+  width: number;
+  height: number;
 }
-
-const CENTER_X = LAYOUT.WIDTH / 2;
-const CENTER_Y = LAYOUT.HEIGHT / 2;
 
 const BUTTON_STYLE = {
   fontFamily: FONT_FAMILY,
   fontSize: 18,
   color: COLOR.TEXT,
   backgroundColor: COLOR.BUTTON_BG,
-  padding: { x: 12, y: 6 },
+  padding: { x: 14, y: 8 },
 };
 
 const PRIMARY_BUTTON_STYLE = {
@@ -42,13 +42,22 @@ export function WinOverlay({
   onReady,
   onPlayAgain,
   onNewImage,
+  width,
+  height,
 }: WinOverlayProps) {
   const [stats, setStats] = useState<WinStats | null>(null);
+  const [layout, setLayout] = useState({ width, height });
+
+  const centerX = layout.width / 2;
+  const centerY = layout.height / 2;
 
   onReady({
     show: setStats,
     hide: () => {
       setStats(null);
+    },
+    resize: (nextWidth: number, nextHeight: number) => {
+      setLayout({ width: nextWidth, height: nextHeight });
     },
   });
 
@@ -63,37 +72,39 @@ export function WinOverlay({
       : '';
 
   return (
-    <Fragment>
+    <Container x={centerX} y={centerY}>
       <Rectangle
-        x={CENTER_X}
-        y={CENTER_Y}
-        width={LAYOUT.WIDTH}
-        height={LAYOUT.HEIGHT}
+        x={0}
+        y={0}
+        width={layout.width}
+        height={layout.height}
         fillColor={COLOR.OVERLAY}
         fillAlpha={0.65}
         originX={0.5}
+        originY={0.5}
       />
 
       <Rectangle
         ref={(rectangle) => {
           rectangle.setStrokeStyle(1, COLOR.PANEL_BORDER, 0.8);
         }}
-        x={CENTER_X}
-        y={CENTER_Y}
-        width={420}
-        height={260}
+        x={0}
+        y={0}
+        width={460}
+        height={280}
         fillColor={COLOR.PANEL}
         fillAlpha={0.98}
         originX={0.5}
+        originY={0.5}
       />
 
       <Text
-        x={CENTER_X}
-        y={CENTER_Y - 78}
+        x={0}
+        y={-84}
         text="Solved!"
         style={{
           fontFamily: FONT_FAMILY,
-          fontSize: 40,
+          fontSize: 44,
           fontStyle: 'bold',
           color: COLOR.ACCENT,
         }}
@@ -101,28 +112,28 @@ export function WinOverlay({
       />
 
       <Text
-        x={CENTER_X}
-        y={CENTER_Y - 18}
+        x={0}
+        y={-16}
         text={`Time ${formatTime(stats.elapsed)} · ${String(stats.moves)} moves`}
-        style={{ fontFamily: FONT_FAMILY, fontSize: 20, color: COLOR.TEXT }}
+        style={{ fontFamily: FONT_FAMILY, fontSize: 22, color: COLOR.TEXT }}
         originX={0.5}
       />
 
       <Text
-        x={CENTER_X}
-        y={CENTER_Y + 18}
+        x={0}
+        y={22}
         text={bestText}
         style={{
           fontFamily: FONT_FAMILY,
-          fontSize: 15,
+          fontSize: 17,
           color: stats.isNewBest ? COLOR.ACCENT : COLOR.MUTED,
         }}
         originX={0.5}
       />
 
       <Text
-        x={CENTER_X - 105}
-        y={CENTER_Y + 80}
+        x={-115}
+        y={88}
         text="Play Again"
         style={PRIMARY_BUTTON_STYLE}
         originX={0.5}
@@ -131,14 +142,14 @@ export function WinOverlay({
       />
 
       <Text
-        x={CENTER_X + 105}
-        y={CENTER_Y + 80}
+        x={115}
+        y={88}
         text="New Image"
         style={BUTTON_STYLE}
         originX={0.5}
         input={{ useHandCursor: true }}
         onPointerDown={onNewImage}
       />
-    </Fragment>
+    </Container>
   );
 }

@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 
-import { COLOR } from './constants';
+import { COLOR, LAYOUT } from './constants';
 import * as scenes from './scenes';
 
 new Phaser.Game({
-  width: 800,
-  height: 600,
+  width: LAYOUT.WIDTH,
+  height: LAYOUT.HEIGHT,
   title: 'Sliding Tiles',
   url: import.meta.env.VITE_APP_HOMEPAGE,
   version: import.meta.env.VITE_APP_VERSION,
@@ -15,8 +15,9 @@ new Phaser.Game({
   ],
   disableContextMenu: import.meta.env.PROD,
   backgroundColor: COLOR.BACKGROUND,
+  roundPixels: true,
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
 });

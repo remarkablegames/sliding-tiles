@@ -1,4 +1,4 @@
-import { Fragment, Text, useState } from 'phaser-jsx';
+import { Container, Fragment, Text, useState } from 'phaser-jsx';
 import type { Dispatch, SetStateAction } from 'react';
 
 import {
@@ -7,7 +7,6 @@ import {
   DIFFICULTIES,
   type Difficulty,
   FONT_FAMILY,
-  LAYOUT,
 } from '../constants';
 import { type BestScore, formatTime } from '../utils';
 
@@ -17,6 +16,12 @@ export interface HudHandle {
   setBest: Dispatch<SetStateAction<BestScore | null>>;
   setDifficulty: Dispatch<SetStateAction<Difficulty>>;
   setStatus: Dispatch<SetStateAction<string>>;
+  resize: (
+    width: number,
+    boardX: number,
+    boardY: number,
+    boardSize: number,
+  ) => void;
 }
 
 interface HudProps {
@@ -24,6 +29,10 @@ interface HudProps {
   onNewGame: () => void;
   onNewImage: () => void;
   onSelectDifficulty: (size: Difficulty) => void;
+  width: number;
+  boardX: number;
+  boardY: number;
+  boardSize: number;
 }
 
 const TEXT_STYLE = {
@@ -31,15 +40,16 @@ const TEXT_STYLE = {
   color: COLOR.TEXT,
 };
 
-const BUTTON_Y = 568;
+const HUD_TOP = 24;
+const BUTTON_GAP = 14;
 
 function getButtonStyle(active: boolean) {
   return {
     fontFamily: FONT_FAMILY,
-    fontSize: 16,
+    fontSize: 18,
     color: active ? COLOR.BUTTON_ACTIVE_TEXT : COLOR.TEXT,
     backgroundColor: active ? COLOR.ACCENT : COLOR.BUTTON_BG,
-    padding: { x: 10, y: 5 },
+    padding: { x: 14, y: 8 },
   };
 }
 
@@ -48,115 +58,111 @@ export function Hud({
   onNewGame,
   onNewImage,
   onSelectDifficulty,
+  width,
+  boardX,
+  boardY,
+  boardSize,
 }: HudProps) {
   const [moves, setMoves] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [best, setBest] = useState<BestScore | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>(DEFAULT_DIFFICULTY);
   const [status, setStatus] = useState('');
+  const [layout, setLayout] = useState({ width, boardX, boardY, boardSize });
 
-  onReady({ setMoves, setElapsed, setBest, setDifficulty, setStatus });
+  onReady({
+    setMoves,
+    setElapsed,
+    setBest,
+    setDifficulty,
+    setStatus,
+    resize: (nextWidth, nextBoardX, nextBoardY, nextBoardSize) => {
+      setLayout({
+        width: nextWidth,
+        boardX: nextBoardX,
+        boardY: nextBoardY,
+        boardSize: nextBoardSize,
+      });
+    },
+  });
 
-  const statsX = LAYOUT.WIDTH - LAYOUT.HUD.PADDING;
+  const bestText = best
+    ? `Best: ${formatTime(best.time)} · ${String(best.moves)} moves`
+    : 'Best: N/A';
 
   return (
     <Fragment>
-      <Text
-        x={LAYOUT.HUD.PADDING}
-        y={14}
-        text="Sliding Tiles"
-        style={{ ...TEXT_STYLE, fontSize: 28, fontStyle: 'bold' }}
-        originX={0}
-        originY={0}
-      />
-
-      <Text
-        x={LAYOUT.HUD.PADDING}
-        y={52}
-        text="Click a tile beside a gap, or use arrow keys / WASD."
-        style={{ ...TEXT_STYLE, fontSize: 13, color: COLOR.MUTED }}
-        originX={0}
-        originY={0}
-      />
-
-      <Text
-        x={statsX}
-        y={14}
-        text={`Moves: ${String(moves)}`}
-        style={{ ...TEXT_STYLE, fontSize: 20 }}
-        originX={1}
-        originY={0}
-      />
-
-      <Text
-        x={statsX}
-        y={40}
-        text={`Time: ${formatTime(elapsed)}`}
-        style={{ ...TEXT_STYLE, fontSize: 20 }}
-        originX={1}
-        originY={0}
-      />
-
-      <Text
-        x={statsX}
-        y={64}
-        text={
-          best
-            ? `Best: ${formatTime(best.time)} · ${String(best.moves)} moves`
-            : 'Best: N/A'
-        }
-        style={{ ...TEXT_STYLE, fontSize: 13, color: COLOR.MUTED }}
-        originX={1}
-        originY={0}
-      />
-
-      {status && (
+      <Container x={layout.width / 2} y={HUD_TOP}>
         <Text
-          x={LAYOUT.WIDTH / 2}
-          y={14}
-          text={status}
-          style={{ ...TEXT_STYLE, fontSize: 13, color: COLOR.MUTED }}
+          x={0}
+          y={0}
+          text="Sliding Tiles"
+          style={{ ...TEXT_STYLE, fontSize: 40, fontStyle: 'bold' }}
           originX={0.5}
           originY={0}
         />
-      )}
 
-      {DIFFICULTIES.map((size, index) => (
         <Text
-          x={LAYOUT.BOARD.X + index * 68}
-          y={BUTTON_Y}
-          text={`${String(size)}×${String(size)}`}
-          style={getButtonStyle(size === difficulty)}
-          originX={0}
+          x={0}
+          y={54}
+          text="Click a tile beside a gap, or use arrow keys / WASD."
+          style={{ ...TEXT_STYLE, fontSize: 17, color: COLOR.MUTED }}
+          originX={0.5}
           originY={0}
-          input={{ useHandCursor: true }}
-          onPointerDown={() => {
-            onSelectDifficulty(size);
-          }}
         />
-      ))}
 
-      <Text
-        x={LAYOUT.BOARD.X + LAYOUT.BOARD.SIZE - 120}
-        y={BUTTON_Y}
-        text="New Game"
-        style={getButtonStyle(false)}
-        originX={1}
-        originY={0}
-        input={{ useHandCursor: true }}
-        onPointerDown={onNewGame}
-      />
+        <Text
+          x={0}
+          y={92}
+          text={`Moves: ${String(moves)}   ·   Time: ${formatTime(elapsed)}   ·   ${bestText}`}
+          style={{ ...TEXT_STYLE, fontSize: 19 }}
+          originX={0.5}
+          originY={0}
+        />
 
-      <Text
-        x={LAYOUT.BOARD.X + LAYOUT.BOARD.SIZE}
-        y={BUTTON_Y}
-        text="New Image"
-        style={getButtonStyle(false)}
-        originX={1}
-        originY={0}
-        input={{ useHandCursor: true }}
-        onPointerDown={onNewImage}
-      />
+        {status && (
+          <Text
+            x={0}
+            y={128}
+            text={status}
+            style={{ ...TEXT_STYLE, fontSize: 16, color: COLOR.MUTED }}
+            originX={0.5}
+            originY={0}
+          />
+        )}
+      </Container>
+
+      <Container
+        x={layout.boardX + layout.boardSize / 2}
+        y={layout.boardY + layout.boardSize + BUTTON_GAP}
+      >
+        {DIFFICULTIES.slice()
+          .reverse()
+          .map((size, index) => ({
+            label: `${String(size)}×${String(size)}`,
+            active: size === difficulty,
+            onPress: () => {
+              onSelectDifficulty(size);
+            },
+            x: (index + 1) * -70 + 30,
+          }))
+          .concat(
+            { label: 'Shuffle', active: false, onPress: onNewGame, x: 41 },
+            { label: 'New Puzzle', active: false, onPress: onNewImage, x: 153 },
+          )
+          .map((item) => (
+            <Text
+              x={item.x}
+              y={0}
+              text={item.label}
+              style={getButtonStyle(item.active)}
+              originX={0.5}
+              originY={0}
+              input={{ useHandCursor: true }}
+              onPointerDown={item.onPress}
+            />
+          ))}
+      </Container>
     </Fragment>
   );
 }

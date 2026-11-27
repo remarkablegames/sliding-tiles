@@ -26,8 +26,8 @@ export class PuzzleBoard {
   private readonly keyBindings: KeyBinding[] = [];
   private readonly cellSize: number;
   private readonly tileSize: number;
-  private readonly boardX = LAYOUT.BOARD.X;
-  private readonly boardY = LAYOUT.BOARD.Y;
+  private boardX: number;
+  private boardY: number;
   private readonly blankValue: number;
   private cells: (Tile | null)[] = [];
   private blankIndex: number;
@@ -49,6 +49,9 @@ export class PuzzleBoard {
     this.blankValue = size * size - 1;
     this.cellSize = LAYOUT.BOARD.SIZE / size;
     this.tileSize = this.cellSize - PUZZLE.GAP;
+
+    this.boardX = this.scene.scale.width / 2 - LAYOUT.BOARD.SIZE / 2;
+    this.boardY = this.scene.scale.height / 2 - LAYOUT.BOARD.SIZE / 2;
 
     this.background = scene.add
       .rectangle(
@@ -199,6 +202,14 @@ export class PuzzleBoard {
       const position = this.getCellPosition(index);
       tile.setPosition(position.x, position.y);
     });
+  }
+
+  resize(width: number, height: number): void {
+    this.boardX = width / 2 - LAYOUT.BOARD.SIZE / 2;
+    this.boardY = height / 2 - LAYOUT.BOARD.SIZE / 2;
+
+    this.background.setPosition(this.boardX, this.boardY);
+    this.layoutTiles();
   }
 
   private cancelAnimations(): void {

@@ -7,7 +7,7 @@ import {
   WinOverlay,
   type WinOverlayHandle,
 } from '../components';
-import { DEFAULT_DIFFICULTY, type Difficulty, KEY } from '../constants';
+import { DEFAULT_DIFFICULTY, type Difficulty, KEY, LAYOUT } from '../constants';
 import { PuzzleBoard } from '../gameobjects';
 import {
   type BestScore,
@@ -66,6 +66,10 @@ export class Game extends Phaser.Scene {
         onSelectDifficulty={(size) => {
           this.changeDifficulty(size);
         }}
+        width={this.scale.width}
+        boardX={LAYOUT.BOARD.X}
+        boardY={LAYOUT.BOARD.Y}
+        boardSize={LAYOUT.BOARD.SIZE}
       />,
       this,
     );
@@ -81,6 +85,8 @@ export class Game extends Phaser.Scene {
         onNewImage={() => {
           this.loadNewImage();
         }}
+        width={this.scale.width}
+        height={this.scale.height}
       />,
       this,
     );
@@ -97,11 +103,31 @@ export class Game extends Phaser.Scene {
       },
     });
 
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.handleResize, this);
+
     if (this.textures.exists(this.textureKey)) {
       this.createBoard();
     } else {
       this.hud.setStatus("Couldn't load a photo. Try New Image.");
     }
+
+    this.resizeUI();
+  }
+
+  private handleResize = (gameSize: Phaser.Structs.Size): void => {
+    const { width, height } = gameSize;
+
+    this.board?.resize(width, height);
+    this.resizeUI();
+  };
+
+  private resizeUI(): void {
+    const { width, height } = this.scale;
+    const boardX = width / 2 - LAYOUT.BOARD.SIZE / 2;
+    const boardY = height / 2 - LAYOUT.BOARD.SIZE / 2;
+
+    this.hud.resize(width, boardX, boardY, LAYOUT.BOARD.SIZE);
+    this.overlay.resize(width, height);
   }
 
   private createBoard(): void {
