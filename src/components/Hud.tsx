@@ -9,6 +9,7 @@ import {
   FONT_FAMILY,
 } from '../constants';
 import { type BestScore, formatTime } from '../utils';
+import { Button } from './Button';
 
 export interface HudHandle {
   setMoves: Dispatch<SetStateAction<number>>;
@@ -43,16 +44,6 @@ const TEXT_STYLE = {
 
 const HEADER_TOP = 85;
 const FOOTER_GAP = 15;
-
-function getButtonStyle(active: boolean) {
-  return {
-    fontFamily: FONT_FAMILY,
-    fontSize: 18,
-    color: active ? COLOR.BUTTON_ACTIVE_TEXT : COLOR.TEXT,
-    backgroundColor: active ? COLOR.ACCENT : COLOR.BUTTON_BG,
-    padding: { x: 14, y: 8 },
-  };
-}
 
 export function Hud({
   onReady,
@@ -156,16 +147,17 @@ export function Hud({
             { label: 'New Puzzle', active: false, onPress: onNewImage, x: 153 },
           )
           .map((item) => (
-            <Text
+            <Button
               x={item.x}
               y={0}
-              text={item.label}
-              style={getButtonStyle(item.active)}
+              active={item.active}
+              variant="default"
               originX={0.5}
               originY={0}
-              input={{ useHandCursor: true }}
-              onPointerDown={item.onPress}
-            />
+              onClick={item.onPress}
+            >
+              {item.label}
+            </Button>
           ))}
       </Container>
     </Fragment>

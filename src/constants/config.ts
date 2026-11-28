@@ -37,5 +37,7 @@ export const COLOR = {
   ACCENT: '#38bdf8',
   BUTTON_BG: '#1e293b',
   BUTTON_ACTIVE_TEXT: '#082f49',
+  BUTTON_HOVER_BG: '#334155',
+  BUTTON_HOVER_TEXT: '#ffffff',
   OVERLAY: 0x020617,
 } as const;

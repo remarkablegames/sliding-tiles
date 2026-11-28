@@ -2,6 +2,7 @@ import { Container, Rectangle, Text, useState } from 'phaser-jsx';
 
 import { COLOR, FONT_FAMILY } from '../constants';
 import { type BestScore, formatTime } from '../utils';
+import { Button } from './Button';
 
 export interface WinStats {
   moves: number;
@@ -23,20 +24,6 @@ interface WinOverlayProps {
   width: number;
   height: number;
 }
-
-const BUTTON_STYLE = {
-  fontFamily: FONT_FAMILY,
-  fontSize: 18,
-  color: COLOR.TEXT,
-  backgroundColor: COLOR.BUTTON_BG,
-  padding: { x: 14, y: 8 },
-};
-
-const PRIMARY_BUTTON_STYLE = {
-  ...BUTTON_STYLE,
-  color: COLOR.BUTTON_ACTIVE_TEXT,
-  backgroundColor: COLOR.ACCENT,
-};
 
 export function WinOverlay({
   onReady,
@@ -131,25 +118,25 @@ export function WinOverlay({
         originX={0.5}
       />
 
-      <Text
+      <Button
         x={-115}
         y={88}
-        text="Play Again"
-        style={PRIMARY_BUTTON_STYLE}
+        variant="primary"
         originX={0.5}
-        input={{ useHandCursor: true }}
-        onPointerDown={onPlayAgain}
-      />
+        onClick={onPlayAgain}
+      >
+        Play Again
+      </Button>
 
-      <Text
+      <Button
         x={115}
         y={88}
-        text="New Image"
-        style={BUTTON_STYLE}
+        variant="default"
         originX={0.5}
-        input={{ useHandCursor: true }}
-        onPointerDown={onNewImage}
-      />
+        onClick={onNewImage}
+      >
+        New Puzzle
+      </Button>
     </Container>
   );
 }
