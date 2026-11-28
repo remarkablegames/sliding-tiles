@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
 import { render } from 'phaser-jsx';
+import { click, open, select, success } from 'websfx';
 
 import {
   Hud,
   type HudHandle,
+  SoundToggle,
   WinOverlay,
   type WinOverlayHandle,
 } from '../components';
@@ -12,11 +14,13 @@ import { PuzzleBoard } from '../gameobjects';
 import {
   type BestScore,
   type BestScores,
+  configureSound,
   createSeed,
   getPicsumUrl,
   getPuzzleTextureKey,
   isBetterScore,
   loadBestScores,
+  loadSoundConfig,
   saveBestScores,
   searchParams,
 } from '../utils';
@@ -39,6 +43,8 @@ export class Game extends Phaser.Scene {
   }
 
   create() {
+    configureSound(loadSoundConfig());
+
     this.bestScores = loadBestScores();
     this.difficulty = DEFAULT_DIFFICULTY;
     this.moves = 0;
@@ -68,6 +74,7 @@ export class Game extends Phaser.Scene {
           this.changeDifficulty(size);
         }}
         onHint={() => {
+          click();
           this.board?.toggleHint();
         }}
         width={this.scale.width}
@@ -95,6 +102,8 @@ export class Game extends Phaser.Scene {
       this,
     );
 
+    render(<SoundToggle x={16} y={16} />, this);
+
     this.hud.setDifficulty(this.difficulty);
     this.hud.setBest(this.bestScores[this.difficulty] ?? null);
 
@@ -112,7 +121,7 @@ export class Game extends Phaser.Scene {
     if (this.textures.exists(this.textureKey)) {
       this.createBoard();
     } else {
-      this.hud.setStatus("Couldn't load a puzzle. Try again.");
+      this.hud.setStatus("⚠️ Couldn't load a puzzle. Try again.");
     }
 
     this.resizeUI();
@@ -152,12 +161,8 @@ export class Game extends Phaser.Scene {
       this,
       this.difficulty,
       this.textureKey,
-      () => {
-        this.handleMove();
-      },
-      () => {
-        this.handleSolve();
-      },
+      this.handleMove,
+      this.handleSolve,
     );
 
     this.hud.setStatus('');
@@ -178,7 +183,8 @@ export class Game extends Phaser.Scene {
     this.overlay.hide();
   }
 
-  private handleMove(): void {
+  private handleMove = (): void => {
+    select();
     this.moves += 1;
     this.hud.setMoves(this.moves);
 
@@ -189,7 +195,7 @@ export class Game extends Phaser.Scene {
         this.timerEvent.paused = false;
       }
     }
-  }
+  };
 
   private updateTimer(): void {
     if (this.startedAt === null) {
@@ -207,7 +213,8 @@ export class Game extends Phaser.Scene {
     return Math.floor((this.time.now - this.startedAt) / 1000);
   }
 
-  private handleSolve(): void {
+  private handleSolve = (): void => {
+    success();
     const elapsed = this.getElapsedSeconds();
 
     if (this.timerEvent) {
@@ -234,7 +241,7 @@ export class Game extends Phaser.Scene {
       best,
       isNewBest,
     });
-  }
+  };
 
   private startNewGame(): void {
     if (this.loading) {
@@ -242,11 +249,12 @@ export class Game extends Phaser.Scene {
     }
 
     if (!this.textures.exists(this.textureKey)) {
-      this.hud.setStatus("Couldn't load a puzzle. Try again.");
+      this.hud.setStatus("⚠️ Couldn't load a puzzle. Try again.");
       return;
     }
 
     this.hud.setStatus('');
+    open();
     this.resetRun();
 
     if (this.board) {
@@ -262,11 +270,12 @@ export class Game extends Phaser.Scene {
     }
 
     this.difficulty = size;
+    select();
     this.hud.setDifficulty(size);
     this.hud.setBest(this.bestScores[size] ?? null);
 
     if (!this.textures.exists(this.textureKey)) {
-      this.hud.setStatus("Couldn't load a puzzle. Try again.");
+      this.hud.setStatus("⚠️ Couldn't load a puzzle. Try again.");
       return;
     }
 
@@ -279,6 +288,7 @@ export class Game extends Phaser.Scene {
     }
 
     this.loading = true;
+    open();
     this.overlay.hide();
     this.board?.setLocked(true);
     this.hud.setStatus('🧩 Loading a new puzzle...');
@@ -312,7 +322,7 @@ export class Game extends Phaser.Scene {
           }
         }
 
-        this.hud.setStatus("Couldn't load a puzzle. Try again.");
+        this.hud.setStatus("⚠️ Couldn't load a puzzle. Try again.");
 
         return;
       }

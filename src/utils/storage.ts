@@ -68,7 +68,28 @@ export function loadBestScores(): BestScores {
 
 export function saveBestScores(scores: BestScores): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+    const raw = localStorage.getItem(STORAGE_KEY);
+    let existing: Record<string, unknown> = {};
+
+    if (raw !== null) {
+      try {
+        const parsed = JSON.parse(raw) as unknown;
+        if (
+          typeof parsed === 'object' &&
+          parsed !== null &&
+          !Array.isArray(parsed)
+        ) {
+          existing = parsed as Record<string, unknown>;
+        }
+      } catch {
+        existing = {};
+      }
+    }
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ ...existing, ...scores }),
+    );
   } catch {
     // Storage can be unavailable in private browsing or when the quota is full.
   }
