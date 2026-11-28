@@ -131,7 +131,7 @@ export function WinOverlay({
       <Button
         x={115}
         y={88}
-        variant="default"
+        variant="secondary"
         originX={0.5}
         onClick={onNewImage}
       >

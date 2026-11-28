@@ -6,7 +6,7 @@ interface ButtonProps {
   children: string;
   onClick: () => void;
   active?: boolean;
-  variant?: 'primary' | 'default';
+  variant?: 'primary' | 'secondary';
   x?: number;
   y?: number;
   originX?: number;
@@ -17,7 +17,7 @@ export function Button({
   children,
   onClick,
   active = false,
-  variant = 'default',
+  variant = 'secondary',
   x,
   y,
   originX,
@@ -26,16 +26,18 @@ export function Button({
   const [hovered, setHovered] = useState(false);
 
   const isPrimary = active || variant === 'primary';
-  const backgroundColor = hovered
-    ? COLOR.BUTTON_HOVER_BG
-    : isPrimary
-      ? COLOR.ACCENT
-      : COLOR.BUTTON_BG;
-  const color = hovered
-    ? COLOR.BUTTON_HOVER_TEXT
-    : isPrimary
-      ? COLOR.BUTTON_ACTIVE_TEXT
-      : COLOR.TEXT;
+  const backgroundColor =
+    hovered && !isPrimary
+      ? COLOR.BUTTON_HOVER_BG
+      : isPrimary
+        ? COLOR.ACCENT
+        : COLOR.BUTTON_BG;
+  const color =
+    hovered && !isPrimary
+      ? COLOR.BUTTON_HOVER_TEXT
+      : isPrimary
+        ? COLOR.BUTTON_ACTIVE_TEXT
+        : COLOR.TEXT;
 
   return (
     <Text

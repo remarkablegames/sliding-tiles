@@ -151,7 +151,7 @@ export function Hud({
               x={item.x}
               y={0}
               active={item.active}
-              variant="default"
+              variant="secondary"
               originX={0.5}
               originY={0}
               onClick={item.onPress}
