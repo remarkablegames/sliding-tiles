@@ -30,6 +30,7 @@ interface HudProps {
   onNewGame: () => void;
   onNewImage: () => void;
   onSelectDifficulty: (size: Difficulty) => void;
+  onHint: () => void;
   width: number;
   boardX: number;
   boardY: number;
@@ -50,6 +51,7 @@ export function Hud({
   onNewGame,
   onNewImage,
   onSelectDifficulty,
+  onHint,
   width,
   boardX,
   boardY,
@@ -160,6 +162,17 @@ export function Hud({
             </Button>
           ))}
       </Container>
+
+      <Button
+        x={Math.max(16, layout.boardX)}
+        y={16}
+        variant="secondary"
+        originX={0}
+        originY={0}
+        onClick={onHint}
+      >
+        Hint (H)
+      </Button>
     </Fragment>
   );
 }

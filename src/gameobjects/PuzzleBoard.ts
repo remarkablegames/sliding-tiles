@@ -1,11 +1,13 @@
 import Phaser from 'phaser';
 
-import { COLOR, type Difficulty, LAYOUT, PUZZLE } from '../constants';
+import { COLOR, type Difficulty, HINT, LAYOUT, PUZZLE } from '../constants';
 import { Tile } from './Tile';
+
+const PREVIEW_FRAME = 'preview';
 
 interface KeyBinding {
   event: string;
-  handler: () => void;
+  handler: (event: KeyboardEvent) => void;
 }
 
 interface DirectionBinding {
@@ -21,6 +23,7 @@ export class PuzzleBoard {
   private readonly onMove: () => void;
   private readonly onSolve: () => void;
   private readonly background: Phaser.GameObjects.Rectangle;
+  private readonly hintImage: Phaser.GameObjects.Image;
   private readonly missingTile: Tile;
   private readonly tiles: Tile[] = [];
   private readonly keyBindings: KeyBinding[] = [];
@@ -33,6 +36,7 @@ export class PuzzleBoard {
   private blankIndex: number;
   private locked = false;
   private animating = false;
+  private hintVisible = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -67,6 +71,13 @@ export class PuzzleBoard {
     this.ensureFrames();
     this.createTiles();
 
+    this.hintImage = scene.add
+      .image(this.boardX, this.boardY, textureKey, PREVIEW_FRAME)
+      .setOrigin(0)
+      .setDisplaySize(LAYOUT.BOARD.SIZE, LAYOUT.BOARD.SIZE)
+      .setAlpha(0)
+      .setVisible(false);
+
     const blankPosition = this.getCellPosition(this.blankValue);
 
     this.missingTile = new Tile(
@@ -94,6 +105,7 @@ export class PuzzleBoard {
 
     if (locked) {
       this.cancelAnimations();
+      this.clearHint();
     }
   }
 
@@ -103,8 +115,31 @@ export class PuzzleBoard {
     );
   }
 
+  toggleHint(): void {
+    if (this.locked) {
+      return;
+    }
+
+    if (this.hintVisible) {
+      this.hideHint();
+      return;
+    }
+
+    this.hintVisible = true;
+    this.hintImage.setVisible(true);
+    this.scene.tweens.killTweensOf(this.hintImage);
+
+    this.scene.tweens.add({
+      targets: this.hintImage,
+      alpha: HINT.ALPHA,
+      duration: HINT.FADE_DURATION,
+      ease: 'Sine.easeOut',
+    });
+  }
+
   destroy(): void {
     this.removeKeyboardInput();
+    this.clearHint();
 
     for (const tile of this.tiles) {
       this.scene.tweens.killTweensOf(tile);
@@ -116,6 +151,7 @@ export class PuzzleBoard {
 
     this.scene.tweens.killTweensOf(this.missingTile);
     this.missingTile.destroy();
+    this.hintImage.destroy();
     this.background.destroy();
   }
 
@@ -126,6 +162,17 @@ export class PuzzleBoard {
     const offsetX = (source.width - cropSize) / 2;
     const offsetY = (source.height - cropSize) / 2;
     const sourceTileSize = Math.floor(cropSize / this.size);
+
+    if (!texture.has(PREVIEW_FRAME)) {
+      texture.add(
+        PREVIEW_FRAME,
+        0,
+        Math.floor(offsetX),
+        Math.floor(offsetY),
+        cropSize,
+        cropSize,
+      );
+    }
 
     for (let value = 0; value < this.size * this.size; value++) {
       const frameName = this.getFrameName(value);
@@ -209,6 +256,7 @@ export class PuzzleBoard {
     this.boardY = height / 2 - LAYOUT.BOARD.SIZE / 2;
 
     this.background.setPosition(this.boardX, this.boardY);
+    this.hintImage.setPosition(this.boardX, this.boardY);
     this.layoutTiles();
   }
 
@@ -221,9 +269,37 @@ export class PuzzleBoard {
     this.layoutTiles();
   }
 
+  private hideHint(): void {
+    if (!this.hintVisible) {
+      return;
+    }
+
+    this.hintVisible = false;
+    this.scene.tweens.killTweensOf(this.hintImage);
+
+    this.scene.tweens.add({
+      targets: this.hintImage,
+      alpha: 0,
+      duration: HINT.FADE_DURATION,
+      ease: 'Sine.easeIn',
+      onComplete: () => {
+        if (!this.hintVisible) {
+          this.hintImage.setVisible(false);
+        }
+      },
+    });
+  }
+
+  private clearHint(): void {
+    this.hintVisible = false;
+    this.scene.tweens.killTweensOf(this.hintImage);
+    this.hintImage.setAlpha(0).setVisible(false);
+  }
+
   private shuffle(): void {
     this.locked = false;
     this.animating = false;
+    this.clearHint();
 
     for (const tile of this.tiles) {
       this.scene.tweens.killTweensOf(tile);
@@ -302,6 +378,8 @@ export class PuzzleBoard {
       return false;
     }
 
+    this.clearHint();
+
     const previousBlank = this.blankIndex;
 
     this.cells[previousBlank] = tile;
@@ -324,6 +402,7 @@ export class PuzzleBoard {
 
         if (this.isSolved()) {
           this.locked = true;
+          this.clearHint();
           this.revealMissingTile();
           this.onSolve();
         }
@@ -384,6 +463,17 @@ export class PuzzleBoard {
       keyboard.on(event, handler);
       this.keyBindings.push({ event, handler });
     }
+
+    const hintHandler = (event: KeyboardEvent) => {
+      if (event.repeat) {
+        return;
+      }
+
+      this.toggleHint();
+    };
+
+    keyboard.on('keydown-H', hintHandler);
+    this.keyBindings.push({ event: 'keydown-H', handler: hintHandler });
 
     keyboard.addCapture('LEFT,RIGHT,UP,DOWN,W,A,S,D');
   }

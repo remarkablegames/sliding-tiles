@@ -23,6 +23,7 @@ Or download for desktop:
 
 - Choose a 3×3, 4×4, or 5×5 board.
 - Click a tile beside the gap, or use the arrow keys / WASD to slide tiles.
+- Press **Hint** (or `H`) to peek at the finished photo.
 - Solve the photo in the fastest time. Best times are saved in your browser.
 
 Photos are loaded from [Lorem Picsum](https://picsum.photos/).

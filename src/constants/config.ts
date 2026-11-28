@@ -7,8 +7,13 @@ export const DEFAULT_DIFFICULTY: Difficulty = 3;
 export const PUZZLE = {
   IMAGE_SIZE: 1024,
   GAP: 4,
-  TWEEN_DURATION: 120,
+  TWEEN_DURATION: 120, // ms
   SHUFFLE_MOVES_PER_CELL: 50,
+} as const;
+
+export const HINT = {
+  ALPHA: 0.92,
+  FADE_DURATION: 180, // ms
 } as const;
 
 export const LAYOUT = {

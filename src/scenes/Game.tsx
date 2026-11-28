@@ -67,6 +67,9 @@ export class Game extends Phaser.Scene {
         onSelectDifficulty={(size) => {
           this.changeDifficulty(size);
         }}
+        onHint={() => {
+          this.board?.toggleHint();
+        }}
         width={this.scale.width}
         boardX={LAYOUT.BOARD.X}
         boardY={LAYOUT.BOARD.Y}
