@@ -74,8 +74,8 @@ export function WinOverlay({
       <Rectangle
         x={0}
         y={0}
-        width={460}
-        height={280}
+        width={450}
+        height={250}
         fillColor={COLOR.PANEL}
         fillAlpha={0.98}
         originX={0.5}
@@ -88,8 +88,8 @@ export function WinOverlay({
 
       <Text
         x={0}
-        y={-84}
-        text="Solved!"
+        y={-70}
+        text="🎉 Solved!"
         style={{
           fontFamily: FONT_FAMILY,
           fontSize: 44,
@@ -103,7 +103,7 @@ export function WinOverlay({
         x={0}
         y={-16}
         text={`Time ${formatTime(stats.elapsed)} · ${String(stats.moves)} moves`}
-        style={{ fontFamily: FONT_FAMILY, fontSize: 22, color: COLOR.TEXT }}
+        style={{ fontFamily: FONT_FAMILY, fontSize: 20, color: COLOR.TEXT }}
         originX={0.5}
       />
 
@@ -120,9 +120,9 @@ export function WinOverlay({
       />
 
       <Button
-        x={-115}
-        y={88}
-        variant="primary"
+        x={-70}
+        y={70}
+        variant="secondary"
         originX={0.5}
         onClick={onPlayAgain}
       >
@@ -130,9 +130,9 @@ export function WinOverlay({
       </Button>
 
       <Button
-        x={115}
-        y={88}
-        variant="secondary"
+        x={70}
+        y={70}
+        variant="primary"
         originX={0.5}
         onClick={onNewImage}
       >
