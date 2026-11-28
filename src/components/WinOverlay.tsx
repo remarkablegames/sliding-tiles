@@ -72,9 +72,6 @@ export function WinOverlay({
       />
 
       <Rectangle
-        ref={(rectangle) => {
-          rectangle.setStrokeStyle(1, COLOR.PANEL_BORDER, 0.8);
-        }}
         x={0}
         y={0}
         width={460}
@@ -83,6 +80,10 @@ export function WinOverlay({
         fillAlpha={0.98}
         originX={0.5}
         originY={0.5}
+        isStroked={false}
+        lineWidth={1}
+        strokeColor={COLOR.PANEL_BORDER}
+        strokeAlpha={0.8}
       />
 
       <Text
