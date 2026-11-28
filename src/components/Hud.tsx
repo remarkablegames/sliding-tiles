@@ -38,6 +38,7 @@ interface HudProps {
 const TEXT_STYLE = {
   fontFamily: FONT_FAMILY,
   color: COLOR.TEXT,
+  padding: { bottom: 4 },
 };
 
 const HEADER_TOP = 85;
@@ -104,9 +105,9 @@ export function Hud({
 
         <Text
           x={0}
-          y={54}
+          y={58}
           text="Click a tile beside a gap, or use arrow keys / WASD"
-          style={{ ...TEXT_STYLE, fontSize: 18, color: COLOR.MUTED }}
+          style={{ ...TEXT_STYLE, fontSize: 17, color: COLOR.MUTED }}
           originX={0.5}
           originY={0}
         />
