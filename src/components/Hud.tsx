@@ -134,45 +134,50 @@ export function Hud({
         x={layout.boardX + layout.boardSize / 2}
         y={layout.boardY + layout.boardSize + FOOTER_GAP}
       >
-        {DIFFICULTIES.slice()
-          .reverse()
-          .map((size, index) => ({
-            label: `${String(size)}×${String(size)}`,
-            active: size === difficulty,
-            onPress: () => {
-              onSelectDifficulty(size);
-            },
-            x: (index + 1) * -70 + 30,
-          }))
-          .concat(
-            { label: 'Shuffle', active: false, onPress: onNewGame, x: 41 },
-            { label: 'New Puzzle', active: false, onPress: onNewImage, x: 153 },
-          )
-          .map((item) => (
-            <Button
-              x={item.x}
-              y={0}
-              active={item.active}
-              variant="secondary"
-              originX={0.5}
-              originY={0}
-              onClick={item.onPress}
-            >
-              {item.label}
-            </Button>
-          ))}
+        {DIFFICULTIES.map((size, index) => ({
+          label: `${String(size)}×${String(size)}`,
+          active: size === difficulty,
+          onPress: () => {
+            onSelectDifficulty(size);
+          },
+          x: index * 70 - 70,
+        })).map((item) => (
+          <Button
+            x={item.x}
+            y={0}
+            active={item.active}
+            variant="secondary"
+            originX={0.5}
+            originY={0}
+            onClick={item.onPress}
+          >
+            {item.label}
+          </Button>
+        ))}
       </Container>
 
-      <Button
-        x={Math.max(16, layout.boardX)}
-        y={16}
-        variant="secondary"
-        originX={0}
-        originY={0}
-        onClick={onHint}
+      <Container
+        x={layout.boardX + layout.boardSize / 2}
+        y={layout.boardY + layout.boardSize + FOOTER_GAP + 40}
       >
-        Hint (H)
-      </Button>
+        {[
+          { label: 'Hint (H)', active: false, onPress: onHint, x: -105 },
+          { label: 'Shuffle', active: false, onPress: onNewGame, x: -10 },
+          { label: 'New Game', active: false, onPress: onNewImage, x: 99 },
+        ].map((item) => (
+          <Button
+            x={item.x}
+            y={0}
+            active={item.active}
+            variant="secondary"
+            originX={0.5}
+            originY={0}
+            onClick={item.onPress}
+          >
+            {item.label}
+          </Button>
+        ))}
+      </Container>
     </Fragment>
   );
 }
