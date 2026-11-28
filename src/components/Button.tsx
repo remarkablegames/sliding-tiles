@@ -1,4 +1,5 @@
 import { Text, useState } from 'phaser-jsx';
+import { hover } from 'websfx';
 
 import { COLOR, FONT_FAMILY } from '../constants';
 
@@ -56,6 +57,7 @@ export function Button({
       input={{ useHandCursor: true }}
       onPointerDown={onClick}
       onPointerOver={() => {
+        hover();
         setHovered(true);
       }}
       onPointerOut={() => {
