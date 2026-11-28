@@ -18,6 +18,7 @@ import {
   isBetterScore,
   loadBestScores,
   saveBestScores,
+  searchParams,
 } from '../utils';
 
 export class Game extends Phaser.Scene {
@@ -108,10 +109,19 @@ export class Game extends Phaser.Scene {
     if (this.textures.exists(this.textureKey)) {
       this.createBoard();
     } else {
-      this.hud.setStatus("Couldn't load a photo. Try New Image.");
+      this.hud.setStatus("Couldn't load a puzzle. Try again.");
     }
 
     this.resizeUI();
+
+    if (searchParams.has('win')) {
+      this.overlay.show({
+        moves: 10,
+        elapsed: 42,
+        best: null,
+        isNewBest: false,
+      });
+    }
   }
 
   private handleResize = (gameSize: Phaser.Structs.Size): void => {
@@ -229,7 +239,7 @@ export class Game extends Phaser.Scene {
     }
 
     if (!this.textures.exists(this.textureKey)) {
-      this.hud.setStatus("Couldn't load a photo. Try New Image.");
+      this.hud.setStatus("Couldn't load a puzzle. Try again.");
       return;
     }
 
@@ -253,7 +263,7 @@ export class Game extends Phaser.Scene {
     this.hud.setBest(this.bestScores[size] ?? null);
 
     if (!this.textures.exists(this.textureKey)) {
-      this.hud.setStatus("Couldn't load a photo. Try New Image.");
+      this.hud.setStatus("Couldn't load a puzzle. Try again.");
       return;
     }
 
@@ -299,7 +309,7 @@ export class Game extends Phaser.Scene {
           }
         }
 
-        this.hud.setStatus("Couldn't load a photo. Try again.");
+        this.hud.setStatus("Couldn't load a puzzle. Try again.");
 
         return;
       }
